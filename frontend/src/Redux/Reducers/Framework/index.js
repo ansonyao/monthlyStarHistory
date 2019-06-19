@@ -3,22 +3,17 @@ import thunks from './thunks'
 
 /* ------------- Initial State ------------- */
 const INITIAL_STATE = {
-	categories: [],
-	history: []
+	data: []
 }
 
 /* ------------- Create Actions ------------- */
 export const { Types, Creators } = createActions({
-	fetchCategoriesSuccess: ['categories'],
-	fetchHistorySuccess: ['data']
+	fetchFrameworkHistory: ['framework', 'result'],
 })
 
 export const reducer = createReducer(INITIAL_STATE, {
-	[Types.FETCH_CATEGORIES_SUCCESS]: (state, {categories} ) => {
-		return { ...state, categories }
-	},
-	[Types.FETCH_HISTORY_SUCCESS]: (state, {data} ) => {
-		return { ...state, history: data }
+	[Types.FETCH_FRAMEWORK_HISTORY]: (state, { framework, result } ) => {
+		return { ...state, data: [...state.data, { framework, result }]}
 	},
 })
 

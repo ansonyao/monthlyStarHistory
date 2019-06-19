@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {thunks} from 'Redux/Reducers/Category/index'
+import {thunks} from 'Redux/Reducers/Framework/index'
 import {Line} from 'react-chartjs-2';
 import { Month, Device } from 'MyUtils';
 import { HeaderView } from 'Component'

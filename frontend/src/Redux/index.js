@@ -1,12 +1,12 @@
 
 
 import { combineReducers, createStore, applyMiddleware } from 'redux'
-import { reducer as CategoryReducer } from './Reducers/Category'
+import { reducer as FrameworkReducer } from './Reducers/Framework'
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const appReducer = combineReducers({
-	category: CategoryReducer,
+	framework: FrameworkReducer,
 })
 
 export default appReducer
