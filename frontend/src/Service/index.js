@@ -1,9 +1,9 @@
 
 import ApolloClient, { gql } from "apollo-boost";
-
 import _ from 'lodash';
+import axios from 'axios';
 
-var bearerToken = "028f2d2219db8dbde0f9de175840b819e20346de"
+var bearerToken
 
 var getHeaders = () => {
     var headers = {
@@ -16,11 +16,6 @@ var getHeaders = () => {
 
     return headers
 }
-
-const client = new ApolloClient({
-    uri: "https://api.github.com/graphql",
-    headers: getHeaders()
-});
 
 let page = 0
 
@@ -43,7 +38,14 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
         }
     }
     `
+    let response = await axios.get("https://jsondataanson.s3.ca-central-1.amazonaws.com/keyfile.json")
+    bearerToken = response.data.key
     return new Promise((resolve, reject) => {
+        const client = new ApolloClient({
+            uri: "https://api.github.com/graphql",
+            headers: getHeaders()
+        });
+
         client
             .query({
                 query: queryString,
@@ -67,7 +69,7 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
     })
 }
 
-export const getStartHistoryWrapper = async ({owner, name}) => {
+export const getStarHistoryWrapper = async ({owner, name}) => {
     let finalResult = []
     let cursor = null
     let pageResult = await getGithubStarGql({owner, name, cursor})
@@ -83,5 +85,51 @@ export const getStartHistoryWrapper = async ({owner, name}) => {
         }
     }
     console.log(finalResult.length)
-    return finalResult
+    return analyzeResult(finalResult)
+}
+
+const analyzeResult = (starredAtArray) => {
+  // promises to request sampleUrls
+  const firstDate = new Date(starredAtArray[0])
+  const firstDateYear = firstDate.getFullYear()
+  const firstDateMonth = firstDate.getMonth()
+
+  const lastDate = new Date(starredAtArray[starredAtArray.length - 1])
+  const lastDateYear = lastDate.getFullYear()
+  const lastDateMonth = lastDate.getMonth()
+
+  let yearMonthArray = []
+  let tmpMonth = firstDateMonth
+  let tmpYear = firstDateYear
+  while((tmpMonth + tmpYear * 12) <= (lastDateMonth + lastDateYear * 12)) {
+    yearMonthArray.push({"year": tmpYear, "month": tmpMonth})
+    tmpMonth += 1
+    if (tmpMonth === 12) {
+      tmpMonth = 0
+      tmpYear += 1
+    }
+  }
+  console.log(yearMonthArray)
+  var result = [];
+  var monthIndex = 1;
+  for(let i=0; i<starredAtArray.length; i++) {
+    if(monthIndex >= yearMonthArray.length) { continue }
+    const dateStr = starredAtArray[i]
+    const date = new Date(dateStr)
+    const nextMonth = yearMonthArray[monthIndex]
+    const thisMonth = yearMonthArray[monthIndex - 1]
+    if (compareMonthYear(date.getMonth(), date.getFullYear(), nextMonth.month, nextMonth.year) <= 0) {
+      result[monthIndex-1] = {"value": i, "month": thisMonth.month, "year": thisMonth.year};
+      monthIndex += 1;
+    }
+  }
+  let data = yearMonthArray[monthIndex - 1]
+  result[monthIndex-1] = {"value": starredAtArray.length, "month": data.month, "year": data.year}; 
+  console.log(result)
+
+  return result;
+}
+
+function compareMonthYear(m1, y1, m2, y2) {
+  return (m2 + y2 * 12) - (m1 + y1 * 12)
 }
