@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {thunks} from 'Redux/Reducers/Framework/index'
-import {Line} from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { Month, Device } from 'MyUtils';
 import { HeaderView } from 'Component'
 
@@ -9,39 +8,35 @@ var randomColor = require('randomcolor')
 var colors = randomColor({count: 100})
 
 class GithubChart extends Component {
-	componentDidMount() {
-		this.props.dispatch(thunks.fetchHistory(this.props.match.params.category))
-	}
-
 	getChartData = () => {
-		if (!this.props.category) {
+		if (!this.props.framework.data) {
 			 return [] 
 		} else {
-			const {history} = this.props.category
-			if (!(history && history.length > 0)) {
+			const frameworks = this.props.framework.data
+			if (!(frameworks && frameworks.length > 0)) {
 				return []
 			}
-			const longest = history.reduce((x, y) => {
-				if (x && x.history.length > y.history.length ) {
+			const longest = frameworks.reduce((x, y) => {
+				if (x && x.result.length > y.result.length ) {
 					return x
 				} else {
 					return y
 				}
 			})
 			var result = {}
-			result.labels = longest.history.map( x => `${Month.monthIndexToName(x.month)}, ${x.year}`)
-			result.datasets = history.map((x, index) => {
+			result.labels = longest.result.map( x => `${Month.monthIndexToName(x.month)}, ${x.year}`)
+			result.datasets = frameworks.map((x, index) => {
 				var fillZero = (array, length) => {
 					var result = Array(length - array.length).fill('N/A')
 					return result.concat(array)
 				}
 				const color = colors[index]
 				return {
-					label: x.name,
+					label: x.framework.name,
 					fill: false,
 					backgroundColor: color,
 					borderColor: color,
-					data: fillZero(x.history.map(x => x.value), longest.history.length)
+					data: fillZero(x.result.map(x => x.value), longest.result.length)
 				}
 			})
 			return result
@@ -114,16 +109,11 @@ class GithubChart extends Component {
 	}
 }
 
-const mapStateToProps = ({category}) => ({
-    category
-})
-
-const mapDispatchToProps = dispatch => ({
-	dispatch
+const mapStateToProps = ({ framework }) => ({
+    framework
 })
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
 )(GithubChart)
 

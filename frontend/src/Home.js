@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import { thunks } from 'Redux/Reducers/Framework'
+import Chart from './Component/ChartView/Chart'
 
 class Home extends Component {
   componentDidMount(){
@@ -11,7 +12,7 @@ class Home extends Component {
   render() {
     return (
       <div className="App">
-        hello world
+        <Chart/>
       </div>
     );
   }

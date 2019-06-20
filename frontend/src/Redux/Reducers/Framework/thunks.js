@@ -1,13 +1,13 @@
 import Actions from './index'
-import { getStartHistoryWrapper } from 'Service'
+import { getStarHistoryWrapper } from 'Service'
 
 const fetchHistory = ({owner, name}) => {
     return async dispatch => {
         console.log("fetchHistory called")
         try {
-            let result = await getStartHistoryWrapper({owner, name})
+            let result = await getStarHistoryWrapper({owner, name})
             console.log(result)
-            dispatch(Actions.fetchFrameworkHistory({framework: {owner, name}, data: result}))
+            dispatch(Actions.fetchFrameworkHistory({owner, name}, result))
         } catch(e) {
             console.log(e)
         }
