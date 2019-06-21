@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './App.css';
 import { thunks } from 'Redux/Reducers/Framework'
 import Chart from './Component/ChartView/Chart'
+import { FrameworkCardView } from 'Component'
 import _ from 'lodash'
 
 class Home extends Component {
@@ -23,28 +24,12 @@ class Home extends Component {
 
   renderCards = () => {
     const { data } = this.props.framework
-    const { cardContainer } = styles
     let source = _.cloneDeep(data)
     source.push( {type: "addCard"} )
     return source.map((item) => {
-      if (item.type === "addCard") {
-        return (
-          <div style={cardContainer}>
-            <img style={{width: 40, height: 40}} src={require('Image/addLibrary.svg')}/>
-          </div>
-        )
-      } else {
-        return (
-          <div style={cardContainer}>
-            <label>
-              {item.framework.name}
-            </label>
-            <label>
-              {item.framework.owner}
-            </label>
-          </div>
-        )
-      }
+      return (
+        <FrameworkCardView type={item.type} framework={item.framework}/>
+      )
     })
   }
 }
@@ -53,19 +38,6 @@ const mapStateToProps = ({ framework }) => ({
   framework
 })
 
-const styles = {
-  cardContainer: {
-    'width': 150,
-    'height': 150,
-    'border': '2px solid #a1887f',
-    'border-radius': '5px',
-    'display': 'flex',
-    'flex-direction': 'column',
-    'align-items': 'center',
-    'justify-content': 'space-around',
-    'margin-left': '10px',
-    'margin-right': '10px',
-  }
-}
+
 
 export default connect(mapStateToProps)(Home)
