@@ -86,7 +86,6 @@ class GithubChart extends Component {
   render() {
     return (
 			<div>
-				<HeaderView />
 				<div style={{ marginTop: 20, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
 					<div style={{ width: '80%' }}>
 						{this.renderChart()}

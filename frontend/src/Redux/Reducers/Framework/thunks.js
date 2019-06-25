@@ -1,7 +1,7 @@
 import Actions from './index'
 import { getStarHistoryWrapper } from 'Service'
 
-const fetchHistory = ({owner, name}) => {
+const fetchHistory = ({ owner, name }) => {
     return async dispatch => {
         console.log("fetchHistory called")
         try {

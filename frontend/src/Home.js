@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-import { thunks } from 'Redux/Reducers/Framework'
+import actions, { thunks } from 'Redux/Reducers/Framework'
 import Chart from './Component/ChartView/Chart'
-import { FrameworkCardView } from 'Component'
+import { FrameworkCardView, HeaderView } from 'Component'
 import _ from 'lodash'
 
 class Home extends Component {
@@ -14,6 +14,8 @@ class Home extends Component {
   render() {
     return (
       <div className="App">
+        <HeaderView />
+
         <div style={{'display': 'flex', 'flex-direction': 'row', marginLeft: '15%', marginRight: '15%', marginTop: 20, marginBottom: 20}}>
           {this.renderCards()}
         </div>
@@ -23,12 +25,25 @@ class Home extends Component {
   }
 
   renderCards = () => {
+    const { dispatch } = this.props
     const { data } = this.props.framework
     let source = _.cloneDeep(data)
     source.push( {type: "addCard"} )
     return source.map((item) => {
       return (
-        <FrameworkCardView type={item.type} framework={item.framework}/>
+        <FrameworkCardView
+          type={item.type} 
+          framework={item.framework}
+          addFramework={() => {
+            dispatch(actions.addFramework())
+          }}
+          removeFramework={(framework) => {
+            dispatch(actions.removeFramework(framework))
+          }}
+          updateFramework={(framework, owner, name) => {
+            dispatch(actions.updateFramework(framework, owner, name))
+          }}
+        />
       )
     })
   }
