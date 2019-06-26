@@ -15,7 +15,6 @@ class Home extends Component {
     return (
       <div className="App">
         <HeaderView />
-
         <div style={{'display': 'flex', 'flex-direction': 'row', marginLeft: '15%', marginRight: '15%', marginTop: 20, marginBottom: 20}}>
           {this.renderCards()}
         </div>
@@ -29,9 +28,10 @@ class Home extends Component {
     const { data } = this.props.framework
     let source = _.cloneDeep(data)
     source.push( {type: "addCard"} )
-    return source.map((item) => {
+    return source.map((item, index) => {
       return (
         <FrameworkCardView
+          key={index}
           type={item.type} 
           framework={item.framework}
           addFramework={() => {

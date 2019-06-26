@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 
 class FrameworkCardView extends Component {
-    state = {
-        isEditingOwner: false,
-        isEditingName: false,
-        showRemoveButton: false,
+    componentWillReceiveProps(nextProps) {
+        const { framework } = nextProps
+        let owner = ""
+        let name = ""
+        if (framework) {
+            owner = framework.owner
+            name = framework.name
+        }
+        this.setState({
+            owner, name
+        })
     }
 
     render() {
@@ -12,18 +19,15 @@ class FrameworkCardView extends Component {
         const { type, framework, addFramework } = this.props
         if (type === "addCard") {
             return (
-              <div style={cardContainer} onClick={() => {
-                addFramework()
-              }}>
-                <img style={{width: 40, height: 40}} src={require('Image/addLibrary.svg')}/>
-              </div>
+                <div style={cardContainer} onClick={() => {
+                    addFramework()
+                }}>
+                    <img style={{ width: 40, height: 40 }} src={require('Image/addLibrary.svg')} />
+                </div>
             )
         } else {
             return (
                 <div style={cardContainer} 
-                    onClick={()=>{
-                        this.setState({isEditingName: false, isEditingOwner: false})
-                    }}
                     onMouseEnter={() => {
                         this.setState({showRemoveButton: true})
                     }}
@@ -57,19 +61,27 @@ class FrameworkCardView extends Component {
         }
     }
 
-    renderName = (name) => {
-        const { isEditingName } = this.state
+    renderName = () => {
+        const { isEditingName, owner, name } = this.state
+        const { framework, updateFramework } = this.props
         if (isEditingName) {
             return (
-                <input onClick={(event) => {
-                    event.stopPropagation()
-                }}/>
+                <input 
+                    autoFocus
+                    onBlur={() => {
+                        this.setState({isEditingName: false})
+                        updateFramework(framework, owner, name)
+                    }}
+                    onChange={(event) => {
+                        this.setState({name: event.target.value})
+                    }}
+                    value={name}
+                />
             )
         } else {
             return (
-                <label onClick={(event)=>{
+                <label onClick={() => {
                     this.setState({isEditingName: true})
-                    event.stopPropagation()
                 }}>
                     {name}
                 </label>
@@ -77,19 +89,27 @@ class FrameworkCardView extends Component {
         }
     }
 
-    renderOwner = (owner) => {
-        const { isEditingOwner } = this.state
+    renderOwner = () => {
+        const { isEditingOwner, owner, name } = this.state
+        const { framework, updateFramework } = this.props
         if (isEditingOwner) {
             return (
-                <input onClick={(event) => {
-                    event.stopPropagation()
-                }}/>
+                <input 
+                    autoFocus
+                    onBlur={() => {
+                        this.setState({isEditingOwner: false})
+                        updateFramework(framework, owner, name)
+                    }}
+                    onChange={(event) => {
+                        this.setState({owner: event.target.value})
+                    }}
+                    value={owner}
+                />
             )
         } else {
             return (
-                <label onClick={(event)=>{
+                <label onClick={()=>{
                     this.setState({isEditingOwner: true})
-                    event.stopPropagation()
                 }}>
                     {owner}
                 </label>

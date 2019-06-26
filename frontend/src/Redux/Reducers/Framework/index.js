@@ -37,9 +37,9 @@ export const reducer = createReducer(INITIAL_STATE, {
 	[Types.UPDATE_FRAMEWORK]: (state, { framework, owner, name } ) => {
 		let dataCopy = _.cloneDeep(state.data)
 		let matchedFramework = dataCopy.filter((f) => isSameFramework(f.framework, framework))[0]
-		matchedFramework.owner = owner
-		matchedFramework.name = name
-		return { ...state, data: [...state.data, { framework }]}
+		matchedFramework.framework.owner = owner
+		matchedFramework.framework.name = name
+		return { ...state, data: dataCopy}
 	},
 })
 
