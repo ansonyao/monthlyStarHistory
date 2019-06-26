@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
 class FrameworkCardView extends Component {
+    state = {
+        isEditingOwner: false,
+        isEditingName: false,
+        showRemoveButton: false,
+    }
+
     componentWillReceiveProps(nextProps) {
         const { framework } = nextProps
         let owner = ""
@@ -35,8 +41,8 @@ class FrameworkCardView extends Component {
                         this.setState({showRemoveButton: false})
                     }}
                 >
-                  {this.renderName(framework.name)}
                   {this.renderOwner(framework.owner)}
+                  {this.renderName(framework.name)}
                   {this.renderDeleteButton()}
                 </div>
             )

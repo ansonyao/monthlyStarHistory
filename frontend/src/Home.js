@@ -42,6 +42,11 @@ class Home extends Component {
           }}
           updateFramework={(framework, owner, name) => {
             dispatch(actions.updateFramework(framework, owner, name))
+            console.log('fetchHistory')
+            if((owner !== "owner") && (name !== "repo name")) {
+              console.log('dispatch fetch history action')
+              dispatch(thunks.fetchHistory({owner, name}))
+            }
           }}
         />
       )

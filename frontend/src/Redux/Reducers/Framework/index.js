@@ -3,16 +3,16 @@ import thunks from './thunks'
 import _ from 'lodash'
 
 /* ------------- Initial State ------------- */
-const INITIAL_STATE = {
-	data: []
-}
-
 const sample = {
 	framework: {
 		owner: "repo owner",
 		name: "name",
 	},
 	result: []
+}
+
+const INITIAL_STATE = {
+	data: [_.cloneDeep(sample)]
 }
 
 /* ------------- Create Actions ------------- */
@@ -25,7 +25,10 @@ export const { Types, Creators } = createActions({
 
 export const reducer = createReducer(INITIAL_STATE, {
 	[Types.FETCH_FRAMEWORK_HISTORY]: (state, { framework, result } ) => {
-		return { ...state, data: [...state.data, { framework, result }]}
+		let dataCopy = _.cloneDeep(state.data)
+		let matchedFramework = dataCopy.filter((f) => isSameFramework(f.framework, framework))[0]
+		matchedFramework.result = result
+		return { ...state, data: dataCopy}
 	},
 	[Types.REMOVE_FRAMEWORK]: (state, { framework } ) => {
 		const dataCopy = _.cloneDeep(state.data).filter((f) => !isSameFramework(f.framework, framework))
