@@ -98,11 +98,13 @@ class FrameworkCardView extends Component {
             )
         } else {
             return (
-                <label onClick={() => {
-                    this.setState({isEditingName: true})
-                }}>
+                <div 
+                    style={{width: '100%'}}
+                    onClick={() => {
+                        this.setState({isEditingName: true})
+                    }}>
                     {name}
-                </label>
+                </div>
             )
         }
     }
@@ -126,9 +128,11 @@ class FrameworkCardView extends Component {
             )
         } else {
             return (
-                <label onClick={()=>{
-                    this.setState({isEditingOwner: true})
-                }}>
+                <label 
+                    style={{width: '100%'}}
+                    onClick={()=>{
+                        this.setState({isEditingOwner: true})
+                    }}>
                     {owner}
                 </label>
             )
