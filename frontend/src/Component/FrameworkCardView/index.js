@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 
 class FrameworkCardView extends Component {
-    state = {
-        isEditingOwner: false,
-        isEditingName: false,
-        showRemoveButton: false,
+    constructor(props) {
+        super()
+        const { framework } = props
+        let owner = ""
+        let name = ""
+        if (framework) {
+            owner = framework.owner
+            name = framework.name
+        }
+        this.state = {
+            isEditingOwner: false,
+            isEditingName: false,
+            showRemoveButton: false,
+            owner,
+            name,
+        }
     }
 
     componentWillReceiveProps(nextProps) {

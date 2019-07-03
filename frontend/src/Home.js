@@ -7,10 +7,6 @@ import { FrameworkCardView, HeaderView } from 'Component'
 import _ from 'lodash'
 
 class Home extends Component {
-  componentDidMount(){
-    this.props.dispatch(thunks.fetchHistory({owner: "Twotalltotems", name: "react-native-otp-input"}))
-  }
-
   render() {
     return (
       <div className="App">
@@ -42,10 +38,12 @@ class Home extends Component {
           }}
           updateFramework={(framework, owner, name) => {
             dispatch(actions.updateFramework(framework, owner, name))
-            console.log('fetchHistory')
-            if((owner !== "owner") && (name !== "repo name")) {
+            let newFramework = _.cloneDeep(framework)
+            newFramework.owner = owner
+            newFramework.name = name
+            if((owner !== "repo owner") && (name !== "name")) {
               console.log('dispatch fetch history action')
-              dispatch(thunks.fetchHistory({owner, name}))
+              dispatch(thunks.fetchHistory(newFramework))
             }
           }}
         />
