@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import { CircleLoader } from 'react-spinners';
-import { css } from '@emotion/core';
 import ReactLoading from 'react-loading';
-
-const spinnerStyle = css`
-display: block;
-margin: 0 auto;
-border-color: red;
-`;
 
 class FrameworkCardView extends Component {
     constructor(props) {
@@ -150,8 +142,9 @@ class FrameworkCardView extends Component {
     }
 
     renderLoadingIndicator = () => {
+        const { isLoading } = this.props
         return (
-            <ReactLoading type="spinningBubbles" color="#0F0" height={'20%'} width={'20%'} />
+            isLoading && <ReactLoading type="spinningBubbles" color="#0F0" height={'20%'} width={'20%'} />
         )
     }
 }

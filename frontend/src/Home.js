@@ -30,6 +30,7 @@ class Home extends Component {
           key={index}
           type={item.type} 
           framework={item.framework}
+          isLoading={!(item.result && item.result.length > 0)}
           addFramework={() => {
             dispatch(actions.addFramework())
           }}
