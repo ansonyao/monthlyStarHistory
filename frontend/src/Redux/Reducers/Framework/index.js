@@ -16,7 +16,7 @@ const createFramework = () => {
 
 /* ------------- Initial State ------------- */
 const INITIAL_STATE = {
-	data: [createFramework()]
+	data: []
 }
 
 /* ------------- Create Actions ------------- */

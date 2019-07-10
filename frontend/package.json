@@ -31,7 +31,9 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
+    "prestart": "tailwind build ./src/index.tailwind.css -c ./tailwind.config.js -o ./src/index.css",
     "start": "react-scripts start",
+    "prebuild": "tailwind build ./src/index.tailwind.css -c ./tailwind.config.js -o ./src/index.css",
     "build": "react-scripts build",
     "deploy": "react-scripts build && s3-deploy './build/**' --cwd './build/' --region us-east-1 --bucket popularframeworkfrontend --distId E3VUNK0PYA6GUD --invalidate '/*' --signatureVersion v4",
     "test": "react-scripts test",
@@ -47,6 +49,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "tailwindcss": "^1.0.4"
   }
 }
