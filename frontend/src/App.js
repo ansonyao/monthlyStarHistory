@@ -3,8 +3,8 @@ import './App.css';
 import { store } from './Redux'
 import { Provider } from 'react-redux'
 import Home from './Home'
-import Chart from './Component/ChartView/Chart'
-import AuthCallBack from './Page/AuthCallBackPage'
+// import { ChartView } from 'Component'
+// import AuthCallBack from './Page/AuthCallBackPage'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import ReactGA from 'react-ga';
@@ -18,8 +18,8 @@ class App extends Component {
         <div className="App">
           <Router>
             <Route path="/" exact component={Home} />
-            <Route path="/chart/:category" component={Chart} />
-            <Route path="/githubcallback" component={AuthCallBack} />
+            {/* <Route path="/chart/:category" component={ChartView} /> */}
+            {/* <Route path="/githubcallback" component={AuthCallBack} /> */}
           </Router>
         </div>
       </Provider>

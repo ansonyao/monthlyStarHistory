@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import actions, { thunks } from 'Redux/Reducers/Framework'
-import Chart from './Component/ChartView/Chart'
-import { FrameworkCardView, HeaderView } from 'Component'
+import { FrameworkCardView, HeaderView, ChartView } from 'Component'
 import _ from 'lodash'
 
 class Home extends Component {
@@ -14,7 +13,7 @@ class Home extends Component {
         <div style={{'display': 'flex', 'flex-direction': 'row', marginLeft: '15%', marginRight: '15%', marginTop: 20, marginBottom: 20}}>
           {this.renderCards()}
         </div>
-        <Chart/>
+        <ChartView />
       </div>
     );
   }
