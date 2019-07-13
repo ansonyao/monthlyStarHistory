@@ -1,21 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './App.css';
 import actions, { thunks } from 'Redux/Reducers/Framework'
-import { FrameworkCardView, HeaderView, ChartView } from 'Component'
+import { FrameworkCardView, HeaderView, ChartView, EditView } from 'Component'
 import _ from 'lodash'
 
 class Home extends Component {
+  state = {
+    showEditView: false,
+    addingNewCard: false,
+    editedFramework: null
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className="w-full h-full relative">
         <HeaderView />
         <div style={{'display': 'flex', 'flex-direction': 'row', marginLeft: '15%', marginRight: '15%', marginTop: 20, marginBottom: 20}}>
           {this.renderCards()}
         </div>
         <ChartView />
+        {this.renderEditView()}
       </div>
     );
+  }
+
+  renderEditView = () => {
+    const { showEditView, addingNewCard, editedFramework } = this.state
+    const { dispatch } = this.props
+    if (showEditView) {
+      return (
+        <EditView
+          onSavePressed={(framework, owner, name) => {
+            if (addingNewCard) {
+              dispatch(actions.addFramework(owner, name))
+              dispatch(thunks.fetchHistory({owner, name}))
+            } else {
+              dispatch(actions.updateFramework(framework, owner, name))
+              let newFramework = _.cloneDeep(framework)
+              newFramework.owner = owner
+              newFramework.name = name
+              dispatch(thunks.fetchHistory(newFramework))
+            }
+            this.setState({ showEditView: false, addingNewCard: false })
+          }}
+          onCancelPressed={() => {
+            this.setState({ showEditView: false, addingNewCard: false })
+          }}
+          framework={editedFramework}
+        />
+      ) 
+    } else {
+      return null
+    }
   }
 
   renderCards = () => {
@@ -30,21 +66,14 @@ class Home extends Component {
           type={item.type} 
           framework={item.framework}
           isLoading={!(item.result && item.result.length > 0)}
-          addFramework={() => {
-            dispatch(actions.addFramework())
+          onPressAdd={() => {
+            this.setState({showEditView: true, addingNewCard: true})
           }}
-          removeFramework={(framework) => {
+          onPressEdit={() => {
+            this.setState({showEditView: true, addingNewCard: false, editedFramework: item.framework})
+          }}
+          onPressRemove={(framework) => {
             dispatch(actions.removeFramework(framework))
-          }}
-          updateFramework={(framework, owner, name) => {
-            dispatch(actions.updateFramework(framework, owner, name))
-            let newFramework = _.cloneDeep(framework)
-            newFramework.owner = owner
-            newFramework.name = name
-            if((owner !== "repo owner") && (name !== "name")) {
-              console.log('dispatch fetch history action')
-              dispatch(thunks.fetchHistory(newFramework))
-            }
           }}
         />
       )
@@ -55,7 +84,5 @@ class Home extends Component {
 const mapStateToProps = ({ framework }) => ({
   framework
 })
-
-
 
 export default connect(mapStateToProps)(Home)

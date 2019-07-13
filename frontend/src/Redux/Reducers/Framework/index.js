@@ -3,11 +3,11 @@ import thunks from './thunks'
 import _ from 'lodash'
 const uuidv4 = require('uuid/v4');
 
-const createFramework = () => {
+const createFramework = (owner, name) => {
 	return ({
 		framework: {
-			owner: "repo owner",
-			name: "name",
+			owner,
+			name,
 			id: uuidv4(),
 		},
 		result: []
@@ -23,7 +23,7 @@ const INITIAL_STATE = {
 export const { Types, Creators } = createActions({
 	fetchFrameworkHistory: ['framework', 'result'],
 	removeFramework: ['framework'],
-	addFramework: [], 
+	addFramework: ['owner', 'name'], 
 	updateFramework: ['framework', 'owner', 'name']
 })
 
@@ -39,8 +39,8 @@ export const reducer = createReducer(INITIAL_STATE, {
 		const dataCopy = _.cloneDeep(state.data).filter(data => data.framework.id !== framework.id)
 		return { ...state, data: dataCopy}
 	},
-	[Types.ADD_FRAMEWORK]: (state) => {
-		return { ...state, data: [...state.data, createFramework()]}
+	[Types.ADD_FRAMEWORK]: (state, { owner, name }) => {
+		return { ...state, data: [...state.data, createFramework(owner, name)]}
 	},
 	[Types.UPDATE_FRAMEWORK]: (state, { framework, owner, name } ) => {
 		let dataCopy = _.cloneDeep(state.data)

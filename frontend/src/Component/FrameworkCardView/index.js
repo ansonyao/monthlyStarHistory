@@ -1,45 +1,29 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 
 class FrameworkCardView extends Component {
-    constructor(props) {
-        super()
-        const { framework } = props
-        let owner = ""
-        let name = ""
-        if (framework) {
-            owner = framework.owner
-            name = framework.name
-        }
-        this.state = {
-            isEditingOwner: false,
-            isEditingName: false,
-            showRemoveButton: false,
-            owner,
-            name,
-        }
+    static propTypes = {
+        onPressAdd: PropTypes.func,
+        onPressRemove: PropTypes.func,
+        type: PropTypes.string,
+        framework: PropTypes.object,
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { framework } = nextProps
-        let owner = ""
-        let name = ""
-        if (framework) {
-            owner = framework.owner
-            name = framework.name
+    constructor() {
+        super()
+        this.state = {
+            showRemoveButton: false,
         }
-        this.setState({
-            owner, name
-        })
     }
 
     render() {
         const { cardContainer } = styles
-        const { type, framework, addFramework } = this.props
+        const { type, framework, onPressAdd, onPressEdit } = this.props
         if (type === "addCard") {
             return (
                 <div style={cardContainer} onClick={() => {
-                    addFramework()
+                    onPressAdd()
                 }}>
                     <img style={{ width: 40, height: 40 }} src={require('Image/addLibrary.svg')} />
                 </div>
@@ -53,6 +37,7 @@ class FrameworkCardView extends Component {
                     onMouseLeave={() => {
                         this.setState({showRemoveButton: false})
                     }}
+                    onClick={onPressEdit}
                 >
                   {this.renderOwner(framework.owner)}
                   {this.renderName(framework.name)}
@@ -65,14 +50,14 @@ class FrameworkCardView extends Component {
 
     renderDeleteButton = () => {
         const { showRemoveButton } = this.state;
-        const { removeFramework, framework } = this.props;
+        const { onPressRemove, framework } = this.props;
         if (showRemoveButton) {
             return (
                 <img 
                     style={{width: 30, height: 50, marginLeft: 100, bottom: 0, right: 10}} 
                     src={require('Image/delete.svg')}
                     onClick={() => {
-                        removeFramework(framework)
+                        onPressRemove(framework)
                     }}
                 />
             )
@@ -82,63 +67,21 @@ class FrameworkCardView extends Component {
     }
 
     renderName = () => {
-        const { isEditingName, owner, name } = this.state
-        const { framework, updateFramework } = this.props
-        if (isEditingName) {
-            return (
-                <input 
-                    autoFocus
-                    onBlur={() => {
-                        this.setState({isEditingName: false})
-                        updateFramework(framework, owner, name)
-                    }}
-                    onChange={(event) => {
-                        this.setState({name: event.target.value})
-                    }}
-                    value={name}
-                />
-            )
-        } else {
-            return (
-                <div 
-                    style={{width: '100%'}}
-                    onClick={() => {
-                        this.setState({isEditingName: true})
-                    }}>
-                    {name}
-                </div>
-            )
-        }
+        const { framework: { name } } = this.props
+        return (
+            <div className="w-full text-center" >
+                {name}
+            </div>
+        )
     }
 
     renderOwner = () => {
-        const { isEditingOwner, owner, name } = this.state
-        const { framework, updateFramework } = this.props
-        if (isEditingOwner) {
-            return (
-                <input 
-                    autoFocus
-                    onBlur={() => {
-                        this.setState({isEditingOwner: false})
-                        updateFramework(framework, owner, name)
-                    }}
-                    onChange={(event) => {
-                        this.setState({owner: event.target.value})
-                    }}
-                    value={owner}
-                />
-            )
-        } else {
-            return (
-                <label 
-                    style={{width: '100%'}}
-                    onClick={()=>{
-                        this.setState({isEditingOwner: true})
-                    }}>
-                    {owner}
-                </label>
-            )
-        }
+        const { framework: { owner } } = this.props
+        return (
+            <div className="w-full text-center" >
+                {owner}
+            </div>
+        )
     }
 
     renderLoadingIndicator = () => {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { store } from './Redux'
 import { Provider } from 'react-redux'
 import Home from './Home'
@@ -15,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
+        <div className="w-full h-full">
           <Router>
             <Route path="/" exact component={Home} />
             {/* <Route path="/chart/:category" component={ChartView} /> */}
