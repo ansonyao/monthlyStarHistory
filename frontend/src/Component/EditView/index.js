@@ -32,8 +32,8 @@ export default class EditView extends Component {
     renderCloseIcon = () => {
         const {onCancelPressed} = this.props
         return (
-            <button type="button" onClick={onCancelPressed} className="absolute top-0 right-0 mt-2 mr-2">
-                <img src={closeIcon} className="w-5"/>
+            <button type="button" onClick={onCancelPressed} className="absolute top-0 right-0 mt-2 mr-2 focus:outline-none">
+                <img src={closeIcon} className="w-8"/>
             </button>
         )
     }

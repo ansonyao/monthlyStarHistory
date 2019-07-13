@@ -84,7 +84,6 @@ export const getStarHistoryWrapper = async ({owner, name}) => {
             break
         }
     }
-    console.log(finalResult.length)
     return analyzeResult(finalResult)
 }
 
@@ -109,7 +108,6 @@ const analyzeResult = (starredAtArray) => {
       tmpYear += 1
     }
   }
-  console.log(yearMonthArray)
   var result = [];
   var monthIndex = 1;
   for(let i=0; i<starredAtArray.length; i++) {

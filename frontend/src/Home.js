@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import actions, { thunks } from 'Redux/Reducers/Framework'
 import { FrameworkCardView, HeaderView, ChartView, EditView } from 'Component'
 import _ from 'lodash'
+import { createFramework } from 'MyUtils/Framework'
 
 class Home extends Component {
   state = {
@@ -32,8 +33,9 @@ class Home extends Component {
         <EditView
           onSavePressed={(framework, owner, name) => {
             if (addingNewCard) {
-              dispatch(actions.addFramework(owner, name))
-              dispatch(thunks.fetchHistory({owner, name}))
+              const frameworkRecrod = createFramework(owner, name)
+              dispatch(actions.addFramework(frameworkRecrod))
+              dispatch(thunks.fetchHistory(frameworkRecrod.framework))
             } else {
               dispatch(actions.updateFramework(framework, owner, name))
               let newFramework = _.cloneDeep(framework)
@@ -65,7 +67,8 @@ class Home extends Component {
           key={index}
           type={item.type} 
           framework={item.framework}
-          isLoading={!(item.result && item.result.length > 0)}
+          loading={item.loading}
+          dataError={item.dataError}
           onPressAdd={() => {
             this.setState({showEditView: true, addingNewCard: true})
           }}

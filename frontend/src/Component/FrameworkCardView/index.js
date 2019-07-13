@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
+import errorIcon from 'Image/error-icon.png';
 
 class FrameworkCardView extends Component {
     static propTypes = {
@@ -56,7 +57,8 @@ class FrameworkCardView extends Component {
                 <img 
                     style={{width: 30, height: 50, marginLeft: 100, bottom: 0, right: 10}} 
                     src={require('Image/delete.svg')}
-                    onClick={() => {
+                    onClick={(event) => {
+                        event.stopPropagation()
                         onPressRemove(framework)
                     }}
                 />
@@ -85,10 +87,14 @@ class FrameworkCardView extends Component {
     }
 
     renderLoadingIndicator = () => {
-        const { isLoading } = this.props
-        return (
-            isLoading && <ReactLoading type="spinningBubbles" color="#0F0" height={'20%'} width={'20%'} />
-        )
+        const { loading, dataError } = this.props
+        if (loading) {
+            return <ReactLoading type="spinningBubbles" color="#0F0" height={'20%'} width={'20%'} />
+        } else if (dataError) {
+            return <img src={errorIcon} className="w-8"/>
+        } else {
+            return null
+        }
     }
 }
 
