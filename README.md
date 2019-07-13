@@ -1,4 +1,4 @@
-![demo.gif](https://github.com/ansonyao/monthlyStarHistory/demo.gif)
+![demo.gif](https://github.com/ansonyao/monthlyStarHistory/blob/master/demo.gif)
 
 # Why do we need another Star History Repo?
 
