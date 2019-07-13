@@ -94,8 +94,8 @@ class FrameworkCardView extends Component {
         }
         if (loading) {
             return (
-                <div className="w-8 h-8">
-                    <Circle percent={`${percentage}`} strokeWidth="4" strokeColor="#D3D3D3" />
+                <div className="w-12 h-12">
+                    <Circle percent={`${percentage}`} strokeWidth="8" strokeColor="#4caf50" />
                 </div>
             )
         } else if (dataError) {
