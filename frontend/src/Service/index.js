@@ -23,7 +23,8 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
     const queryString = gql`
     query fetchGithubStars($owner: String!, $name: String!, $cursor: String) {
         repository(owner: $owner, name: $name) {
-            stargazers(first: 100, after: $cursor) {
+            stargazers(last: 100, before: $cursor) {
+                totalCount
                 edges{
                     starredAt
                     cursor
@@ -56,7 +57,7 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
                 },
             })
             .then(info => {
-                const result = info.data.repository.stargazers.edges
+                const result = info.data.repository.stargazers
                 console.log(_.last(result) && _.last(result).starredAt)
                 console.log(`page: ${page}`)
                 page += 1
@@ -69,17 +70,19 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
     })
 }
 
-export const getStarHistoryWrapper = async ({owner, name}) => {
+export const getStarHistoryWrapper = async ({owner, name}, onProgress) => {
     let finalResult = []
     let cursor = null
-    let pageResult = await getGithubStarGql({owner, name, cursor})
-    cursor = _.last(pageResult).cursor
-    finalResult = finalResult.concat(pageResult.map(x => x.starredAt))
+    let {edges: pageResult, totalCount} = await getGithubStarGql({owner, name, cursor})
+    cursor = _.first(pageResult).cursor
+    finalResult = pageResult.map(x => x.starredAt).concat(finalResult)
     while (pageResult.length > 0) {
-        pageResult = await getGithubStarGql({owner, name, cursor})
+        const tmp = await getGithubStarGql({owner, name, cursor})
+        pageResult = tmp.edges
         if (pageResult.length > 0) {
-            cursor = _.last(pageResult).cursor
-            finalResult = finalResult.concat(pageResult.map(x => x.starredAt))
+            cursor = _.first(pageResult).cursor
+            finalResult = pageResult.map(x => x.starredAt).concat(finalResult)
+            onProgress && onProgress(finalResult.length, totalCount)
         } else {
             break
         }
@@ -93,7 +96,8 @@ const analyzeResult = (starredAtArray) => {
   const firstDateYear = firstDate.getFullYear()
   const firstDateMonth = firstDate.getMonth()
 
-  const lastDate = new Date(starredAtArray[starredAtArray.length - 1])
+//   const lastDate = new Date(starredAtArray[starredAtArray.length - 1])
+  const lastDate = new Date()
   const lastDateYear = lastDate.getFullYear()
   const lastDateMonth = lastDate.getMonth()
 
@@ -123,8 +127,6 @@ const analyzeResult = (starredAtArray) => {
   }
   let data = yearMonthArray[monthIndex - 1]
   result[monthIndex-1] = {"value": starredAtArray.length, "month": data.month, "year": data.year}; 
-  console.log(result)
-
   return result;
 }
 

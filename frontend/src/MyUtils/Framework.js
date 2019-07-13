@@ -9,6 +9,8 @@ export const createFramework = (owner, name) => {
         },
         loading: true,
         dataError: null,
+        worked: 0,
+        total: null,
 		result: []
 	})
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
+import { Line, Circle } from 'rc-progress';
 import errorIcon from 'Image/error-icon.png';
 
 class FrameworkCardView extends Component {
@@ -87,9 +87,17 @@ class FrameworkCardView extends Component {
     }
 
     renderLoadingIndicator = () => {
-        const { loading, dataError } = this.props
+        const { loading, dataError, total, worked } = this.props
+        let percentage = 0
+        if (total) {
+            percentage = Math.round((worked / total) * 100)
+        }
         if (loading) {
-            return <ReactLoading type="spinningBubbles" color="#0F0" height={'20%'} width={'20%'} />
+            return (
+                <div className="w-8 h-8">
+                    <Circle percent={`${percentage}`} strokeWidth="4" strokeColor="#D3D3D3" />
+                </div>
+            )
         } else if (dataError) {
             return <img src={errorIcon} className="w-8"/>
         } else {

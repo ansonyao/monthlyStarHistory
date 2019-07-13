@@ -69,6 +69,8 @@ class Home extends Component {
           framework={item.framework}
           loading={item.loading}
           dataError={item.dataError}
+          total={item.total}
+          worked={item.worked}
           onPressAdd={() => {
             this.setState({showEditView: true, addingNewCard: true})
           }}

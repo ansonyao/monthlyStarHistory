@@ -10,6 +10,7 @@ const INITIAL_STATE = {
 /* ------------- Create Actions ------------- */
 export const { Types, Creators } = createActions({
 	fetchFrameworkHistory: ['framework', 'result'],
+	fetchFrameworkProgress: ['framework', 'worked', 'total'],
 	fetchFrameworkHistoryFailed: ['framework', 'error'],
 	removeFramework: ['framework'],
 	addFramework: ['framework'], 
@@ -23,6 +24,13 @@ export const reducer = createReducer(INITIAL_STATE, {
 		matchedFramework.result = result
 		matchedFramework.loading = false
 		matchedFramework.dataError = null
+		return { ...state, data: dataCopy}
+	},
+	[Types.FETCH_FRAMEWORK_PROGRESS]: (state, { framework, worked, total } ) => {
+		let dataCopy = _.cloneDeep(state.data)
+		let matchedFramework = dataCopy.filter(data => data.framework.id === framework.id)[0]
+		matchedFramework.worked = worked
+		matchedFramework.total = total
 		return { ...state, data: dataCopy}
 	},
 	[Types.FETCH_FRAMEWORK_HISTORY_FAILED]: (state, { framework, error } ) => {
