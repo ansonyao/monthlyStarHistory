@@ -58,7 +58,6 @@ var getGithubStarGql = async ({owner, name, cursor}) => {
             })
             .then(info => {
                 const result = info.data.repository.stargazers
-                console.log(_.last(result) && _.last(result).starredAt)
                 console.log(`page: ${page}`)
                 page += 1
                 resolve(result)
@@ -125,8 +124,10 @@ const analyzeResult = (starredAtArray) => {
       monthIndex += 1;
     }
   }
-  let data = yearMonthArray[monthIndex - 1]
-  result[monthIndex-1] = {"value": starredAtArray.length, "month": data.month, "year": data.year}; 
+  let length = result.length
+  for (let i=length; i<yearMonthArray.length; i++) {
+    result[i] = {"value": starredAtArray.length, "month": yearMonthArray[i].month, "year": yearMonthArray[i].year}; 
+  }
   return result;
 }
 
