@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import actions, { thunks } from 'Redux/Reducers/Framework'
-import { FrameworkCardView, HeaderView, ChartView, EditView } from 'Component'
+import { FrameworkCardView, HeaderView, ChartView, EditView, BottomView } from 'Component'
 import _ from 'lodash'
 import { createFramework } from 'MyUtils/Framework'
 
@@ -16,11 +16,14 @@ class Home extends Component {
     return (
       <div className="w-full h-full relative">
         <HeaderView />
-        <div style={{'display': 'flex', 'flex-direction': 'row', marginLeft: '15%', marginRight: '15%', marginTop: 20, marginBottom: 20}}>
+        <div 
+          className="flex flex-wrap mx-20 my-12"
+        >
           {this.renderCards()}
         </div>
         <ChartView />
         {this.renderEditView()}
+        <BottomView/>
       </div>
     );
   }

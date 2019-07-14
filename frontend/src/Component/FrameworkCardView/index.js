@@ -19,11 +19,11 @@ class FrameworkCardView extends Component {
     }
 
     render() {
-        const { cardContainer } = styles
         const { type, framework, onPressAdd, onPressEdit } = this.props
+        const containerClassName = "w-32 h-32 inline-block border rounded-sm border-yellow-700 border-2 mx-6 my-3"
         if (type === "addCard") {
             return (
-                <div style={cardContainer} onClick={() => {
+                <div className={`${containerClassName} flex flex-col justify-around items-center` } onClick={() => {
                     onPressAdd()
                 }}>
                     <img style={{ width: 40, height: 40 }} src={require('Image/addLibrary.svg')} />
@@ -31,7 +31,7 @@ class FrameworkCardView extends Component {
             )
         } else {
             return (
-                <div style={cardContainer} 
+                <div className={containerClassName}
                     onMouseEnter={() => {
                         this.setState({showRemoveButton: true})
                     }}
@@ -40,10 +40,12 @@ class FrameworkCardView extends Component {
                     }}
                     onClick={onPressEdit}
                 >
-                  {this.renderOwner(framework.owner)}
-                  {this.renderName(framework.name)}
-                  {this.renderLoadingIndicator()}
-                  {this.renderDeleteButton()}
+                    <div className="relative w-full h-full flex flex-col justify-around items-center">
+                        {this.renderOwner(framework.owner)}
+                        {this.renderName(framework.name)}
+                        {this.renderLoadingIndicator()}
+                        {this.renderDeleteButton()}
+                    </div>
                 </div>
             )
         }
@@ -55,7 +57,7 @@ class FrameworkCardView extends Component {
         if (showRemoveButton) {
             return (
                 <img 
-                    style={{width: 30, height: 50, marginLeft: 100, bottom: 0, right: 10}} 
+                    className="w-8 absolute top-0 right-0"
                     src={require('Image/delete.svg')}
                     onClick={(event) => {
                         event.stopPropagation()
@@ -63,15 +65,13 @@ class FrameworkCardView extends Component {
                     }}
                 />
             )
-        } else {
-            return (<div style={{width: 30, height: 50}}></div>)
         }
     }
 
     renderName = () => {
         const { framework: { name } } = this.props
         return (
-            <div className="w-full text-center" >
+            <div className="w-full text-center text-sm px-4" >
                 {name}
             </div>
         )
@@ -80,7 +80,7 @@ class FrameworkCardView extends Component {
     renderOwner = () => {
         const { framework: { owner } } = this.props
         return (
-            <div className="w-full text-center" >
+            <div className="w-full text-center text-sm px-4" >
                 {owner}
             </div>
         )
@@ -105,22 +105,6 @@ class FrameworkCardView extends Component {
         }
     }
 }
-
-const styles = {
-    cardContainer: {
-      'width': 150,
-      'height': 150,
-      'border': '2px solid #a1887f',
-      'border-radius': '5px',
-      'display': 'flex',
-      'flex-direction': 'column',
-      'align-items': 'center',
-      'justify-content': 'space-around',
-      'margin-left': '10px',
-      'margin-right': '10px',
-    }
-  }
-
 
 export default FrameworkCardView
 
